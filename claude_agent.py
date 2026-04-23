@@ -1,0 +1,39 @@
+import anthropic
+import os
+from sheets import get_properties, get_faq
+
+client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+
+SYSTEM_PROMPT = """შენ ხარ სამაკლერო კომპანიის ასისტენტი Instagram-ზე.
+წერე მოკლედ, მეგობრულად და ბუნებრივად — როგორც ნამდვილი ადამიანი.
+არასოდეს დაწერო "მე ვარ AI" ან "ვარ ბოტი".
+თუ კითხვა ობიექტებზეა — მიეცი კონკრეტული ინფო.
+თუ ვერ პოულობ შესაფერ ობიექტს — სთხოვე დააზუსტოს კრიტერიუმები.
+პასუხი მოკლე იყოს — მაქსიმუმ 3-4 წინადადება.
+დაამთავრე პასუხი კითხვით ან call-to-action-ით."""
+
+
+def generate_reply(user_message: str, conversation_history: list = []) -> str:
+    properties = get_properties(user_message)
+    faq = get_faq()
+
+    context = f"""
+ხელმისაწვდომი ობიექტები:
+{properties}
+
+ხშირი კითხვები და პასუხები:
+{faq}
+"""
+
+    messages = conversation_history + [
+        {"role": "user", "content": user_message}
+    ]
+
+    response = client.messages.create(
+        model="claude-sonnet-4-5",
+        max_tokens=500,
+        system=SYSTEM_PROMPT + f"\n\nმონაცემთა ბაზა:\n{context}",
+        messages=messages
+    )
+
+    return response.content[0].text
