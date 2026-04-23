@@ -10,7 +10,7 @@ def send_dm(recipient_id: str, message: str) -> dict:
         "recipient": {"id": recipient_id},
         "message": {"text": message},
         "messaging_type": "RESPONSE",
-        "access_token": os.getenv("INSTAGRAM_ACCESS_TOKEN")
+        "access_token": "IGAAMZCWWZCehsFBZAGJoNkIzTGpEVjJWbVBvZAi13Y3VLQ3ltempuZAmRpYUtnbHd0S0VWUG9FTVdZAaTJBNzhmU1lDMWVZAWXZAmWFhwNV9NVlMySDRKMzQ0eXNxNHJiOHdjaWkxaFBvbk1TZAkVscEg4b0hZAd1FGSGd4a1pvYWtQVnRENAZDZD"
     }
     resp = requests.post(url, json=payload, headers=headers)
     result = resp.json()
