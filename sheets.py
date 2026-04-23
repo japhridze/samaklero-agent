@@ -1,16 +1,22 @@
 import gspread
 from google.oauth2.service_account import Credentials
 import os
+import json
 from dotenv import load_dotenv
 load_dotenv()
 
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly", "https://www.googleapis.com/auth/drive.readonly"]
-
+SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets.readonly",
+    "https://www.googleapis.com/auth/drive.readonly"
+]
 
 def get_sheet_client():
-    creds = Credentials.from_service_account_file(
-        "credentials.json", scopes=SCOPES
-    )
+    creds_json = os.getenv("GOOGLE_CREDENTIALS")
+    if creds_json:
+        creds_dict = json.loads(creds_json)
+        creds = Credentials.from_service_account_info(creds_dict, scopes=SCOPES)
+    else:
+        creds = Credentials.from_service_account_file("credentials.json", scopes=SCOPES)
     return gspread.authorize(creds)
 
 
