@@ -4,8 +4,8 @@ import os
 def send_dm(recipient_id: str, message: str) -> dict:
     """Instagram DM გაგზავნა Meta Graph API-ით"""
     
-    INSTAGRAM_USER_ID = "17841433154370144"
-    token = "IGAAMZCWWZCehsFBZAGJoNkIzTGpEVjJWbVBvZAi13Y3VLQ3ltempuZAmRpYUtnbHd0S0VWUG9FTVdZAaTJBNzhmU1lDMWVZAWXZAmWFhwNV9NVlMySDRKMzQ0eXNxNHJiOHdjaWkxaFBvbk1TZAkVscEg4b0hZAd1FGSGd4a1pvYWtQVnRENAZDZD"
+    INSTAGRAM_USER_ID = os.getenv("INSTAGRAM_USER_ID", "me")
+    token = os.getenv("INSTAGRAM_ACCESS_TOKEN")
     
     url = f"https://graph.facebook.com/v21.0/{INSTAGRAM_USER_ID}/messages"
     
