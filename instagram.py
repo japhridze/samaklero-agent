@@ -2,13 +2,9 @@ import requests
 import os
 
 def send_dm(recipient_id: str, message: str) -> dict:
-    """Instagram DM გაგზავნა Meta Graph API-ით"""
-    
-    INSTAGRAM_USER_ID = "17841433154370144"
-    token = "IGAAMZCWWZCehsFBZAGJoNkIzTGpEVjJWbVBvZAi13Y3VLQ3ltempuZAmRpYUtnbHd0S0VWUG9FTVdZAaTJBNzhmU1lDMWVZAWXZAmWFhwNV9NVlMySDRKMzQ0eXNxNHJiOHdjaWkxaFBvbk1TZAkVscEg4b0hZAd1FGSGd4a1pvYWtQVnRENAZDZD"
-    
-    url = f"https://graph.facebook.com/v21.0/{INSTAGRAM_USER_ID}/messages"
-    
+    token = os.getenv("INSTAGRAM_ACCESS_TOKEN")
+    ig_user_id = os.getenv("INSTAGRAM_USER_ID", "17841433154370144")
+    url = f"https://graph.facebook.com/v21.0/{ig_user_id}/messages"
     headers = {"Content-Type": "application/json"}
     payload = {
         "recipient": {"id": recipient_id},
@@ -16,11 +12,7 @@ def send_dm(recipient_id: str, message: str) -> dict:
         "messaging_type": "RESPONSE",
         "access_token": token
     }
-    
     resp = requests.post(url, json=payload, headers=headers)
     result = resp.json()
-    
-    if "error" in result:
-        print(f"Instagram API შეცდომა: {result['error']}")
-    
+    print(f"Instagram API პასუხი: {result}")
     return result
